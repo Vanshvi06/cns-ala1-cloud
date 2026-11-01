@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ALA 1 - Cloud Task Manager</title>
+<style>
+:root{--a:#06b6d4;--b:#a855f7;--bg:#0b0720}
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;font-family:'Segoe UI',Arial,sans-serif;color:#fff;background:var(--bg);padding:32px 18px 60px;position:relative;overflow-x:hidden}
+.orb{position:fixed;border-radius:50%;filter:blur(90px);opacity:.4;z-index:0;animation:float 10s ease-in-out infinite}
+.o1{width:360px;height:360px;background:var(--a);top:-80px;left:-80px}
+.o2{width:380px;height:380px;background:var(--b);bottom:-100px;right:-80px;animation-delay:-5s}
+@keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,-40px)}}
+.wrap{position:relative;z-index:1;max-width:980px;margin:auto;animation:rise .8s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+a.back{color:#fff;opacity:.7;text-decoration:none;display:inline-block;margin-bottom:14px}
+h1{font-size:clamp(1.8rem,5vw,2.8rem);background:linear-gradient(90deg,var(--a),var(--b),var(--a));background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 4s linear infinite}
+@keyframes shine{to{background-position:200% center}}
+.lead{opacity:.8;margin:8px 0 22px}
+.panel{padding:24px;border-radius:24px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(14px);margin-bottom:22px}
+.panel h2{font-size:1.2rem;margin-bottom:14px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+input[type=text],select{flex:1;min-width:160px;padding:13px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;font-size:1rem;outline:none}
+input[type=file]{flex:1;min-width:200px;color:#fff}
+input::placeholder{color:rgba(255,255,255,.55)}
+select option{color:#000}
+button{cursor:pointer;border:0;border-radius:999px;padding:12px 24px;font-weight:700;font-size:1rem;color:#fff;background:linear-gradient(90deg,var(--a),var(--b));transition:transform .2s}
+button:hover{transform:scale(1.06)}
+button.ghost{background:rgba(255,255,255,.14)}
+ul.list{list-style:none;margin-top:16px}
+ul.list li{display:flex;align-items:center;gap:12px;padding:13px 16px;margin-bottom:10px;border-radius:16px;background:rgba(255,255,255,.08);animation:pop .35s ease both}
+@keyframes pop{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:none}}
+ul.list li.done .txt{text-decoration:line-through;opacity:.5}
+.txt{flex:1;word-break:break-word}
+.txt a{color:#7dd3fc}
+.tag{font-size:.75rem;padding:3px 10px;border-radius:999px}
+.tag.High{background:rgba(239,68,68,.45)}.tag.Medium{background:rgba(245,158,11,.45)}.tag.Low{background:rgba(34,197,94,.4)}
+.tag.size{background:rgba(6,182,212,.3)}
+li button{padding:7px 14px;font-size:.85rem}
+.empty{opacity:.6;text-align:center;padding:18px}
+.msg{margin-top:10px;font-size:.9rem}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
+.stat{padding:16px;border-radius:18px;background:rgba(255,255,255,.08);text-align:center}
+.stat b{display:block;font-size:1.5rem;background:linear-gradient(90deg,var(--a),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat span{font-size:.8rem;opacity:.75}
+.bar{height:10px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--a),var(--b));transition:width .6s}
+table{width:100%;border-collapse:collapse}
+td{padding:11px 6px;border-bottom:1px solid rgba(255,255,255,.12);vertical-align:top;word-break:break-all}
+td:first-child{opacity:.7;width:34%;word-break:normal}
+.ok{color:#4ade80;font-weight:700}.bad{color:#f87171;font-weight:700}
+</style>
+</head>
+<body>
+<div class="orb o1"></div><div class="orb o2"></div>
+<div class="wrap">
+  <a class="back" href="index.html">← Back to Home</a>
+  <h1>☁️ ALA 1: Cloud Task Manager</h1>
+  <p class="lead">A web application hosted on an AWS EC2 virtual machine, with files stored in Amazon S3 and live resource monitoring.</p>
+
+  <section class="panel">
+    <h2>📝 Task Manager (stored on the server disk)</h2>
+    <form class="row" id="form">
+      <input type="text" id="title" placeholder="Enter a new task..." maxlength="120" required>
+      <select id="prio"><option>High</option><option selected>Medium</option><option>Low</option></select>
+      <button type="submit">Add Task</button>
+    </form>
+    <ul class="list" id="list"></ul>
+    <div class="row" style="margin-top:8px">
+      <button class="ghost" id="clearAll">Delete All Tasks</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>🗂️ Cloud File Storage (Amazon S3)</h2>
+    <form class="row" id="upForm">
+      <input type="file" id="file" required>
+      <button type="submit">Upload to S3</button>
+    </form>
+    <div class="msg" id="upMsg"></div>
+    <ul class="list" id="files"></ul>
+  </section>
+
+  <section class="panel">
+    <h2>📊 Resource Management (live from the server)</h2>
+    <div class="stats">
+      <div class="stat"><b id="cpu">-</b><span>CPU usage</span><div class="bar"><i id="cpuBar"></i></div></div>
+      <div class="stat"><b id="mem">-</b><span>Memory usage</span><div class="bar"><i id="memBar"></i></div></div>
+      <div class="stat"><b id="dsk">-</b><span>Disk usage</span><div class="bar"><i id="dskBar"></i></div></div>
+      <div class="stat"><b id="up">-</b><span>Server uptime</span></div>
+      <div class="stat"><b id="tt">-</b><span>Tasks (done / total)</span></div>
+      <div class="stat"><b id="rt">-</b><span>API response time</span></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>🚀 Deployment Details</h2>
+    <table>
+      <tr><td>Cloud platform</td><td id="dPlatform">...</td></tr>
+      <tr><td>Compute service</td><td id="dCompute">...</td></tr>
+      <tr><td>Storage service</td><td id="dStorage">...</td></tr>
+      <tr><td>Region</td><td id="dRegion">...</td></tr>
+      <tr><td>Server hostname</td><td id="dHostname">...</td></tr>
+      <tr><td>Operating system</td><td id="dOs">...</td></tr>
+      <tr><td>Runtime</td><td id="dNode">...</td></tr>
+      <tr><td>Live URL</td><td id="dUrl"></td></tr>
+      <tr><td>Secure (HTTPS)</td><td id="dHttps"></td></tr>
+      <tr><td>Internet status</td><td id="dNet"></td></tr>
+    </table>
+  </section>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const fmt = b => b < 1024 ? b + ' B' : b < 1048576 ? (b/1024).toFixed(1) + ' KB' : b < 1073741824 ? (b/1048576).toFixed(1) + ' MB' : (b/1073741824).toFixed(2) + ' GB';
+async function api(url, opt) {
+  const r = await fetch(url, opt);
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.error || r.statusText);
+  return j;
+}
+
+/* ----- tasks ----- */
+async function loadTasks() {
+  const tasks = await api('/api/tasks');
+  const list = $('list'); list.innerHTML = '';
+  if (!tasks.length) list.innerHTML = '<div class="empty">No tasks yet. Add your first task above.</div>';
+  tasks.forEach(t => {
+    const li = document.createElement('li'); if (t.done) li.className = 'done';
+    const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = t.done;
+    cb.onchange = async () => { await api('/api/tasks/' + t.id, { method: 'PATCH', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ done: cb.checked }) }); loadTasks(); };
+    const tx = document.createElement('span'); tx.className = 'txt'; tx.textContent = t.title;
+    const tg = document.createElement('span'); tg.className = 'tag ' + t.prio; tg.textContent = t.prio;
+    const del = document.createElement('button'); del.textContent = 'Delete';
+    del.onclick = async () => { await api('/api/tasks/' + t.id, { method: 'DELETE' }); loadTasks(); };
+    li.append(cb, tx, tg, del); list.appendChild(li);
+  });
+}
+$('form').onsubmit = async e => {
+  e.preventDefault();
+  await api('/api/tasks', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ title: $('title').value, prio: $('prio').value }) });
+  $('title').value = ''; loadTasks();
+};
+$('clearAll').onclick = async () => { if (confirm('Delete all tasks?')) { await api('/api/tasks', { method: 'DELETE' }); loadTasks(); } };
+
+/* ----- files (S3) ----- */
+async function loadFiles() {
+  const list = $('files'); list.innerHTML = '';
+  try {
+    const files = await api('/api/files');
+    if (!files.length) list.innerHTML = '<div class="empty">No files in the S3 bucket yet.</div>';
+    files.forEach(f => {
+      const li = document.createElement('li');
+      const tx = document.createElement('span'); tx.className = 'txt';
+      const a = document.createElement('a'); a.href = f.url; a.target = '_blank'; a.textContent = f.name; tx.appendChild(a);
+      const sz = document.createElement('span'); sz.className = 'tag size'; sz.textContent = fmt(f.size);
+      const del = document.createElement('button'); del.textContent = 'Delete';
+      del.onclick = async () => { await api('/api/files?key=' + encodeURIComponent(f.key), { method: 'DELETE' }); loadFiles(); };
+      li.append(tx, sz, del); list.appendChild(li);
+    });
+  } catch (e) { list.innerHTML = '<div class="empty bad">' + e.message + '</div>'; }
+}
+$('upForm').onsubmit = async e => {
+  e.preventDefault();
+  const fd = new FormData(); fd.append('file', $('file').files[0]);
+  $('upMsg').textContent = 'Uploading to S3...';
+  try { await api('/api/upload', { method: 'POST', body: fd }); $('upMsg').innerHTML = '<span class="ok">Uploaded to S3 successfully.</span>'; $('file').value = ''; loadFiles(); }
+  catch (err) { $('upMsg').innerHTML = '<span class="bad">' + err.message + '</span>'; }
+};
+
+/* ----- stats ----- */
+async function loadStats() {
+  try {
+    const t0 = performance.now();
+    const s = await api('/api/stats');
+    $('rt').textContent = Math.round(performance.now() - t0) + ' ms';
+    $('cpu').textContent = s.cpu.percent + '%'; $('cpuBar').style.width = s.cpu.percent + '%';
+    $('mem').textContent = s.memory.percent + '%'; $('memBar').style.width = s.memory.percent + '%';
+    if (s.disk) { const p = (s.disk.used / s.disk.total * 100).toFixed(1); $('dsk').textContent = p + '%'; $('dskBar').style.width = p + '%'; }
+    const u = s.uptime.serverSec; $('up').textContent = u >= 3600 ? Math.floor(u/3600) + 'h ' + Math.floor(u%3600/60) + 'm' : Math.floor(u/60) + 'm ' + (u%60) + 's';
+    $('tt').textContent = s.tasks.done + ' / ' + s.tasks.total;
+  } catch (e) {}
+}
+
+/* ----- deployment info ----- */
+async function loadInfo() {
+  const i = await api('/api/info');
+  $('dPlatform').textContent = i.platform; $('dCompute').textContent = i.compute; $('dStorage').textContent = i.storage;
+  $('dRegion').textContent = i.region; $('dHostname').textContent = i.hostname; $('dOs').textContent = i.os; $('dNode').textContent = 'Node.js ' + i.node;
+}
+$('dUrl').textContent = location.href;
+const net = () => $('dNet').innerHTML = navigator.onLine ? '<span class="ok">Online</span>' : '<span class="bad">Offline</span>';
+$('dHttps').innerHTML = location.protocol === 'https:' ? '<span class="ok">Yes (HTTPS)</span>' : '<span class="bad">HTTP (public IP)</span>';
+net(); addEventListener('online', net); addEventListener('offline', net);
+
+loadTasks(); loadFiles(); loadInfo(); loadStats(); setInterval(loadStats, 5000);
+</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CNS ALA Activities - ALA 1</title>
+<style>
+:root{--a:#06b6d4;--b:#a855f7;--bg:#0b0720}
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;font-family:'Segoe UI',Arial,sans-serif;color:#fff;background:var(--bg);overflow:hidden;position:relative}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.55;animation:float 9s ease-in-out infinite}
+.o1{width:380px;height:380px;background:var(--a);top:-80px;left:-80px}
+.o2{width:420px;height:420px;background:var(--b);bottom:-100px;right:-80px;animation-delay:-4s}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(40px,-50px) scale(1.15)}}
+.container{position:relative;z-index:2;text-align:center;padding:52px 56px;border-radius:36px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 30px 70px rgba(0,0,0,.5);animation:rise 1s ease both;max-width:94vw}
+@keyframes rise{from{opacity:0;transform:translateY(40px) scale(.96)}to{opacity:1;transform:none}}
+h1{font-size:clamp(2rem,6vw,3.4rem);font-weight:800;letter-spacing:1px;background:linear-gradient(90deg,var(--a),var(--b),var(--a));background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 4s linear infinite}
+@keyframes shine{to{background-position:200% center}}
+.sub{margin-top:12px;font-size:1.15rem;opacity:.85}
+.card{margin:38px auto 0;width:280px;padding:34px 20px 30px;border-radius:28px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);transition:transform .25s,box-shadow .25s}
+.card:hover{transform:translateY(-6px);box-shadow:0 16px 36px rgba(0,0,0,.4)}
+.icon{font-size:3.8rem;line-height:1;display:inline-block;animation:bob 3s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-12px) rotate(5deg)}}
+.card h2{margin:18px 0 24px;font-size:2rem;font-weight:800}
+.btn{display:inline-block;padding:16px 38px;border-radius:999px;color:#fff;text-decoration:none;font-weight:700;font-size:1.1rem;background:linear-gradient(90deg,var(--a),var(--b));animation:pulse 2s infinite;transition:transform .25s}
+.btn:hover{transform:scale(1.08)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 #06b6d499}70%{box-shadow:0 0 0 20px transparent}100%{box-shadow:0 0 0 0 transparent}}
+</style></head><body>
+<div class="orb o1"></div><div class="orb o2"></div>
+<main class="container">
+<h1>CNS ALA Activities</h1>
+<p class="sub">Select an activity below to open the project</p>
+<div class="card"><div class="icon">🔐</div><h2>ALA 1</h2>
+<a class="btn" href="project.html">Open Project</a></div>
+</main></body></html>

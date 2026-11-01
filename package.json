@@ -1,0 +1,16 @@
+{
+  "name": "cns-ala1-cloud-app",
+  "version": "1.0.0",
+  "description": "CNS ALA 1 - Cloud Task Manager deployed on AWS EC2 with S3 storage",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": { "node": ">=18.15" },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.600.0",
+    "@aws-sdk/s3-request-presigner": "^3.600.0",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1"
+  }
+}
