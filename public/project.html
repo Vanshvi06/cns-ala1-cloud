@@ -18,6 +18,19 @@ a.back{color:#fff;opacity:.7;text-decoration:none;display:inline-block;margin-bo
 h1{font-size:clamp(1.8rem,5vw,2.8rem);background:linear-gradient(90deg,var(--a),var(--b),var(--a));background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 4s linear infinite}
 @keyframes shine{to{background-position:200% center}}
 .lead{opacity:.8;margin:8px 0 22px}
+.req{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px 22px}
+.req li{padding:4px 0 4px 26px;position:relative;line-height:1.5;font-size:.95rem}
+.req li::before{content:'\2714';position:absolute;left:0;color:#4ade80;font-weight:700}
+.req b{display:block}
+.req span{opacity:.75;font-size:.85rem}
+.btnrow{display:flex;gap:12px;flex-wrap:wrap}
+.btnrow a{display:inline-block;padding:12px 26px;border-radius:999px;color:#fff;text-decoration:none;font-weight:700;background:linear-gradient(90deg,var(--a),var(--b));transition:transform .2s}
+.btnrow a:hover{transform:scale(1.05)}
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.gal a{display:block;border-radius:14px;overflow:hidden;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);text-decoration:none;color:#fff;transition:transform .2s}
+.gal a:hover{transform:translateY(-4px)}
+.gal img{width:100%;height:130px;object-fit:cover;object-position:top;display:block}
+.gal span{display:block;padding:8px 10px;font-size:.8rem;opacity:.85}
 .panel{padding:24px;border-radius:24px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(14px);margin-bottom:22px}
 .panel h2{font-size:1.2rem;margin-bottom:14px}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
@@ -56,8 +69,23 @@ td:first-child{opacity:.7;width:34%;word-break:normal}
 <div class="orb o1"></div><div class="orb o2"></div>
 <div class="wrap">
   <a class="back" href="index.html">← Back to Home</a>
+  <a class="back" href="report/ALA1_Cloud_Report.pdf" target="_blank" style="float:right;opacity:1;font-weight:600">📄 View Report (PDF)</a>
   <h1>☁️ ALA 1: Cloud Task Manager</h1>
   <p class="lead">A web application hosted on an AWS EC2 virtual machine, with files stored in Amazon S3 and live resource monitoring.</p>
+
+  <section class="panel">
+    <h2>✅ Activity requirements covered</h2>
+    <ul class="req">
+      <li><b>Web application created and deployed</b><span>Cloud Task Manager, this page</span></li>
+      <li><b>Compute service configured</b><span>Amazon EC2 t3.micro, Ubuntu 24.04 (see Deployment Details)</span></li>
+      <li><b>Storage service configured</b><span>Amazon S3 bucket for files (upload below) and an EBS disk for tasks</span></li>
+      <li><b>Hosting accessible over the internet</b><span>Elastic IP 13.237.151.164, HTTP on port 80 through Nginx</span></li>
+      <li><b>Basic resource management</b><span>Live CPU, memory and disk usage, CloudWatch graph, budget alert, Elastic IP, stop and start test</span></li>
+      <li><b>Source code</b><span>GitHub repository (link in Submission below)</span></li>
+      <li><b>Deployment details</b><span>Deployment Details section and the report (PDF)</span></li>
+      <li><b>Screenshots of the running application</b><span>Screenshots gallery below</span></li>
+    </ul>
+  </section>
 
   <section class="panel">
     <h2>📝 Task Manager (stored on the server disk)</h2>
@@ -108,6 +136,41 @@ td:first-child{opacity:.7;width:34%;word-break:normal}
       <tr><td>Secure (HTTPS)</td><td id="dHttps"></td></tr>
       <tr><td>Internet status</td><td id="dNet"></td></tr>
     </table>
+  </section>
+
+  <section class="panel">
+    <h2>📦 Submission</h2>
+    <div class="btnrow">
+      <a href="https://github.com/Vanshvi06/cns-ala1-cloud" target="_blank" rel="noopener">Source code (GitHub)</a>
+      <a href="report/ALA1_Cloud_Report.pdf" target="_blank">Report with deployment details (PDF)</a>
+      <a href="index.html">Home page</a>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>🖼️ Screenshots (click to enlarge)</h2>
+    <div class="gal">
+      <a href="screenshots/09-app-home.jpg" target="_blank"><img loading="lazy" src="screenshots/09-app-home.jpg" alt="Home page"><span>Home page</span></a>
+      <a href="screenshots/10-app-tasks.jpg" target="_blank"><img loading="lazy" src="screenshots/10-app-tasks.jpg" alt="Task manager"><span>Task manager with tasks</span></a>
+      <a href="screenshots/11-app-s3-files.jpg" target="_blank"><img loading="lazy" src="screenshots/11-app-s3-files.jpg" alt="File uploaded to S3"><span>File uploaded to S3</span></a>
+      <a href="screenshots/12-s3-uploaded-file.jpg" target="_blank"><img loading="lazy" src="screenshots/12-s3-uploaded-file.jpg" alt="File inside the S3 bucket"><span>File inside the S3 bucket</span></a>
+      <a href="screenshots/13-resource-deployment.jpg" target="_blank"><img loading="lazy" src="screenshots/13-resource-deployment.jpg" alt="Resource management and deployment details"><span>Resource management and deployment details</span></a>
+      <a href="screenshots/16c-app-after-restart.jpg" target="_blank"><img loading="lazy" src="screenshots/16c-app-after-restart.jpg" alt="App after stop and start"><span>App after stop and start</span></a>
+      <a href="screenshots/05-ec2-running.jpg" target="_blank"><img loading="lazy" src="screenshots/05-ec2-running.jpg" alt="EC2 instance running"><span>EC2 instance running</span></a>
+      <a href="screenshots/06-security-group.jpg" target="_blank"><img loading="lazy" src="screenshots/06-security-group.jpg" alt="Security group rules"><span>Security group rules</span></a>
+      <a href="screenshots/06b-ssh-connected.jpg" target="_blank"><img loading="lazy" src="screenshots/06b-ssh-connected.jpg" alt="Terminal on the instance"><span>Terminal on the instance</span></a>
+      <a href="screenshots/07-pm2-list.jpg" target="_blank"><img loading="lazy" src="screenshots/07-pm2-list.jpg" alt="App online under PM2"><span>App online under PM2</span></a>
+      <a href="screenshots/07b-nginx-test.jpg" target="_blank"><img loading="lazy" src="screenshots/07b-nginx-test.jpg" alt="Nginx configuration test"><span>Nginx configuration test</span></a>
+      <a href="screenshots/03-s3-bucket.jpg" target="_blank"><img loading="lazy" src="screenshots/03-s3-bucket.jpg" alt="S3 bucket created"><span>S3 bucket created</span></a>
+      <a href="screenshots/04a-iam-role-created.jpg" target="_blank"><img loading="lazy" src="screenshots/04a-iam-role-created.jpg" alt="IAM role created"><span>IAM role created</span></a>
+      <a href="screenshots/04b-iam-permissions.jpg" target="_blank"><img loading="lazy" src="screenshots/04b-iam-permissions.jpg" alt="S3 permission on the role"><span>S3 permission on the role</span></a>
+      <a href="screenshots/08-df-free.jpg" target="_blank"><img loading="lazy" src="screenshots/08-df-free.jpg" alt="Disk and memory usage"><span>Disk and memory usage</span></a>
+      <a href="screenshots/14-cloudwatch.jpg" target="_blank"><img loading="lazy" src="screenshots/14-cloudwatch.jpg" alt="CloudWatch CPU graph"><span>CloudWatch CPU graph</span></a>
+      <a href="screenshots/15-budget.jpg" target="_blank"><img loading="lazy" src="screenshots/15-budget.jpg" alt="Budget alert"><span>Budget alert</span></a>
+      <a href="screenshots/16b-started.jpg" target="_blank"><img loading="lazy" src="screenshots/16b-started.jpg" alt="Instance running after restart"><span>Instance running after restart</span></a>
+      <a href="screenshots/01-github-repo.jpg" target="_blank"><img loading="lazy" src="screenshots/01-github-repo.jpg" alt="GitHub repository"><span>GitHub repository</span></a>
+      <a href="screenshots/02-git-push.jpg" target="_blank"><img loading="lazy" src="screenshots/02-git-push.jpg" alt="Code pushed to GitHub"><span>Code pushed to GitHub</span></a>
+    </div>
   </section>
 </div>
 
